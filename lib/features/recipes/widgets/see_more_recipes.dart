@@ -1,3 +1,4 @@
+import 'package:cooking_book/features/recipes/pages/recipe_details_page.dart';
 import 'package:cooking_book/features/recipes/widgets/recipes_card.dart';
 import 'package:cooking_book/providers/random_recipe_provider.dart';
 import 'package:cooking_book/widgets/spinner.dart';
@@ -27,7 +28,14 @@ class SeeMoreRecipes extends ConsumerWidget {
               return RecipesCard(
                 imageUrl: recipe.imageUrl,
                 name: recipe.name,
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => RecipeDetailsPage(recipe: recipe),
+                    ),
+                  );
+                },
               );
             },
             itemCount: data.length,

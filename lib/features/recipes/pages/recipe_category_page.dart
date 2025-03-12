@@ -1,6 +1,10 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cooking_book/entities/recipe_category.dart';
+import 'package:cooking_book/features/recipes/pages/recipe_details_page.dart';
 import 'package:cooking_book/features/recipes/widgets/recipes_card.dart';
+import 'package:cooking_book/providers/recipe_details_provider.dart';
 import 'package:cooking_book/providers/recipes_by_category_provider.dart';
 import 'package:cooking_book/widgets/spinner.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +50,21 @@ class RecipeCategoryPage extends ConsumerWidget {
               return RecipesCard(
                 imageUrl: recipe.imageUrl,
                 name: recipe.name,
-                onTap: () {},
+                onTap: () async {
+                  try {
+                    final data =
+                        await ref.read(recipeDetailsProvider(recipe.id).future);
+                    if (!context.mounted) return;
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => RecipeDetailsPage(recipe: data!),
+                      ),
+                    );
+                  } catch (e) {
+                    log(e.toString());
+                  }
+                },
               );
             },
             itemCount: data.length,
